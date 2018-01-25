@@ -82,6 +82,11 @@ exports.safari = function (input) {
       append(4, `<integer>${input.applications.safari.popup_width}</integer>`)
     }
 
+    if (input.applications.safari.popup_height) {
+      append(4, '<key>Height</key>')
+      append(4, `<integer>${input.applications.safari.popup_height}</integer>`)
+    }
+
     append(3, '</dict>')
     append(2, '</array>')
 
