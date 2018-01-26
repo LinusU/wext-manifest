@@ -98,7 +98,7 @@ exports.safari = function (input) {
     append(4, '<string>default_toolbar_item</string>')
 
     append(4, '<key>Image</key>')
-    append(4, `<string>${input.browser_action.default_icon['32']}</string>`)
+    append(4, `<string>${input.browser_action.default_icon['16']}</string>`)
 
     append(4, '<key>Include By Default</key>')
     append(4, '<true/>')
