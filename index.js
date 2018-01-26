@@ -167,6 +167,11 @@ exports.safari = function (input) {
   append(1, '<key>Description</key>')
   append(1, `<string>${input.description}</string>`)
 
+  if (input.safari.developer_id) {
+    append(1, '<key>DeveloperIdentifier</key>')
+    append(1, `<string>${input.safari.developer_id}</string>`)
+  }
+
   append(1, '<key>ExtensionInfoDictionaryVersion</key>')
   append(1, '<string>1.0</string>')
 
