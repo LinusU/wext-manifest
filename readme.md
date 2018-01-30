@@ -70,17 +70,22 @@ console.log(wextManifest.safari(input))
 | Opera | ✅ |
 | Safari | ✅ |
 
-## WebPack plugin
+## Webpack usage
 
-This module also includes a WebPack plugin that will output the manifest file in your output context.
+You can easily use this module together with the [`write-webpack-plugin`](https://www.npmjs.com/package/write-webpack-plugin) to output the manifest file as part of your build process.
 
 The following example will create `distribution/safari.safariextension/Info.plist` when `TARGET_BROWSER=safari`, and `distribution/chrome/manifest.json` when `TARGET_BROWSER=chrome`.
 
 ```js
 const path = require('path')
-const WextManifestWebpackPlugin = require('@wext/manifest/webpack')
+const wextManifest = require('@wext/manifest')
+const WriteWebpackPlugin = require('write-webpack-plugin')
 
 const targetBrowser = process.env.TARGET_BROWSER
+
+const manifest = wextManifest[targetBrowser]({
+  // Manifest input
+})
 
 module.exports = {
   // ...
@@ -93,41 +98,9 @@ module.exports = {
   plugins: [
     // ...
 
-    new WextManifestWebpackPlugin(targetBrowser, {
-      manifest_version: 2,
-      name: 'Example',
-      version: '1.0.0',
-
-      icons: {
-        16: 'Icon.png',
-        32: 'Icon-32.png',
-        64: 'Icon-64.png'
-      },
-
-      applications: {
-        gecko: { id: '{754FB1AD-CC3B-4856-B6A0-7786F8CA9D17}' },
-        safari: { id: 'com.example.extension' }
-      },
-
-      author: 'Linus Unnebäck',
-      description: 'Example extension',
-      homepage_url: 'http://example.com/',
-
-      permissions: [
-        'activeTab',
-        'http://example.com/*'
-      ],
-
-      browser_action: {
-        default_title: 'Example',
-        default_popup: 'popup.html',
-        default_icon: {
-          16: 'Icon.png',
-          32: 'Icon-32.png',
-          64: 'Icon-64.png'
-        }
-      }
-    })
+    new WriteWebpackPlugin([
+      { name: manifest.name, data: Buffer.from(manifest.content) }
+    ])
   ]
 }
 ```
