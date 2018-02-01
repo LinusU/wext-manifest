@@ -1,3 +1,13 @@
+export interface BackgroundPage {
+  page: string
+}
+
+export interface BackgroundScripts {
+  scripts: string[]
+}
+
+export type Background = BackgroundPage | BackgroundScripts
+
 export interface BrowserAction {
   default_title: string
   default_popup: string
@@ -29,6 +39,7 @@ export interface InputManifest {
 
   icons?: { [size: string]: string }
 
+  background?: Background
   browser_action?: BrowserAction
   content_scripts?: ContentScript[]
 }

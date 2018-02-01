@@ -63,54 +63,68 @@ exports.safari = function (input) {
   append(1, '<key>CFBundleVersion</key>')
   append(1, `<string>${input.version}</string>`)
 
-  if (input.browser_action) {
+  if (input.browser_action || input.background) {
     append(1, '<key>Chrome</key>')
     append(1, '<dict>')
 
-    append(2, '<key>Popovers</key>')
-    append(2, '<array>')
-    append(3, '<dict>')
+    if (input.background) {
+      if (input.background.scripts) {
+        throw new Error('`background.scripts` is not implemented for Safari, use `background.page` for now')
+      }
 
-    append(4, '<key>Filename</key>')
-    append(4, `<string>${input.browser_action.default_popup}</string>`)
-
-    append(4, '<key>Identifier</key>')
-    append(4, '<string>default_popover</string>')
-
-    if (input.applications.safari.popup_width) {
-      append(4, '<key>Width</key>')
-      append(4, `<integer>${input.applications.safari.popup_width}</integer>`)
+      if (input.background.page) {
+        append(2, '<key>Global Page</key>')
+        append(2, `<string>${input.background.page}</string>`)
+      }
     }
 
-    if (input.applications.safari.popup_height) {
-      append(4, '<key>Height</key>')
-      append(4, `<integer>${input.applications.safari.popup_height}</integer>`)
+    if (input.browser_action) {
+      append(2, '<key>Popovers</key>')
+      append(2, '<array>')
+      append(3, '<dict>')
+
+      append(4, '<key>Filename</key>')
+      append(4, `<string>${input.browser_action.default_popup}</string>`)
+
+      append(4, '<key>Identifier</key>')
+      append(4, '<string>default_popover</string>')
+
+      if (input.applications.safari.popup_width) {
+        append(4, '<key>Width</key>')
+        append(4, `<integer>${input.applications.safari.popup_width}</integer>`)
+      }
+
+      if (input.applications.safari.popup_height) {
+        append(4, '<key>Height</key>')
+        append(4, `<integer>${input.applications.safari.popup_height}</integer>`)
+      }
+
+      append(3, '</dict>')
+      append(2, '</array>')
+
+      append(2, '<key>Toolbar Items</key>')
+      append(2, '<array>')
+      append(3, '<dict>')
+
+      append(4, '<key>Identifier</key>')
+      append(4, '<string>default_toolbar_item</string>')
+
+      append(4, '<key>Image</key>')
+      append(4, `<string>${input.browser_action.default_icon['16']}</string>`)
+
+      append(4, '<key>Include By Default</key>')
+      append(4, '<true/>')
+
+      append(4, '<key>Label</key>')
+      append(4, `<string>${input.browser_action.default_title}</string>`)
+
+      append(4, '<key>Popover</key>')
+      append(4, '<string>default_popover</string>')
+
+      append(3, '</dict>')
+      append(2, '</array>')
     }
 
-    append(3, '</dict>')
-    append(2, '</array>')
-
-    append(2, '<key>Toolbar Items</key>')
-    append(2, '<array>')
-    append(3, '<dict>')
-
-    append(4, '<key>Identifier</key>')
-    append(4, '<string>default_toolbar_item</string>')
-
-    append(4, '<key>Image</key>')
-    append(4, `<string>${input.browser_action.default_icon['16']}</string>`)
-
-    append(4, '<key>Include By Default</key>')
-    append(4, '<true/>')
-
-    append(4, '<key>Label</key>')
-    append(4, `<string>${input.browser_action.default_title}</string>`)
-
-    append(4, '<key>Popover</key>')
-    append(4, '<string>default_popover</string>')
-
-    append(3, '</dict>')
-    append(2, '</array>')
     append(1, '</dict>')
   }
 
