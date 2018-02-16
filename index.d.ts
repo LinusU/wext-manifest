@@ -17,6 +17,7 @@ export interface BrowserAction {
 
 export interface ContentScript {
   css?: string[]
+  exclude_globs?: string[]
   js?: string[]
   matches: string[]
   run_at?: 'document_start' | 'document_end' | 'document_idle'

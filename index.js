@@ -134,13 +134,25 @@ exports.safari = function (input) {
     const styleSheets = input.content_scripts.filter(s => s.css).reduce((mem, s) => [...mem, ...s.css], [])
 
     const uniqueMatches = new Set(input.content_scripts.map(s => s.matches.sort().join(';'))).size
+    const uniqueExcludeGlobs = new Set(input.content_scripts.map(s => (s.exclude_globs || []).sort().join(';'))).size
 
     if (uniqueMatches > 1) {
       throw new Error('Safari cannot handle different "matches" properties')
     }
 
+    if (uniqueExcludeGlobs > 1) {
+      throw new Error('Safari cannot handle different "exclude_globs" properties')
+    }
+
     append(1, '<key>Content</key>')
     append(1, '<dict>')
+
+    if (input.content_scripts[0].exclude_globs) {
+      append(2, '<key>Blacklist</key>')
+      append(2, '<array>')
+      for (const pattern of input.content_scripts[0].exclude_globs) append(3, `<string>${pattern}</string>`)
+      append(2, '</array>')
+    }
 
     if (startScripts.length || endScripts.length) {
       append(2, '<key>Scripts</key>')
