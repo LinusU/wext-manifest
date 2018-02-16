@@ -170,10 +170,12 @@ exports.safari = function (input) {
       append(2, '</array>')
     }
 
-    append(2, '<key>Whitelist</key>')
-    append(2, '<array>')
-    for (const pattern of input.content_scripts[0].matches) append(3, `<string>${pattern}</string>`)
-    append(2, '</array>')
+    if (input.content_scripts[0].matches.join(';') !== '*://*/*') {
+      append(2, '<key>Whitelist</key>')
+      append(2, '<array>')
+      for (const pattern of input.content_scripts[0].matches) append(3, `<string>${pattern}</string>`)
+      append(2, '</array>')
+    }
 
     append(1, '</dict>')
   }
